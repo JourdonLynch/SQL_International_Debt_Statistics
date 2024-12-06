@@ -1,17 +1,15 @@
--- num_distinct_countries 
+-- What is the number of distinct countries present in the database? 
 SELECT  COUNT(DISTINCT country_name) AS total_distinct_countries
 FROM international_debt
 
 
--- highest_debt_country 
-SELECT country_name, SUM(debt) AS total_debt
+-- Rank of Countries by Total Debt
+SELECT  RANK()OVER(ORDER BY SUM(debt) DESC),country_name, ROUND(SUM(debt)/(1000000000),2) || ' B'
 FROM international_debt
 GROUP BY country_name
-ORDER BY SUM(debt) DESC
-LIMIT 1
 
 
--- lowest_principal_repayment 
+-- What country has the lowest amount of repayments(indicated by the "DT.AMT.DLXF.CD" indicator code)?
 SELECT country_name, indicator_name, debt AS lowest_repayment
 FROM international_debt
 WHERE indicator_code = 'DT.AMT.DLXF.CD' 
@@ -24,5 +22,4 @@ SELECT COUNT(indicator_code), indicator_name
 FROM international_debt
 GROUP BY indicator_name
 ORDER BY COUNT(indicator_code) DESC
-
 
